@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Art Space</string>
+    <string name="artist_1">Alice Walker</string>
+    <string name="artist_2">John Flemming</string>
+    <string name="artist_3">Emma Rose</string>
+    <string name="artwork_1_title">Statue of the Halo</string>
+    <string name="artwork_2_title">The white dress</string>
+    <string name="artwork_3_title">Fantasy girl</string>
+    <string name="artwork_1_year">2021</string>
+    <string name="artwork_2_year">2019</string>
+    <string name="artwork_3_year">2023</string>
 </resources>
