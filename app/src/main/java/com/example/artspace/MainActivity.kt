@@ -50,12 +50,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ArtSpaceLayout() {
-    var artwork by remember { mutableStateOf(1) } // Track the current artwork
+fun ArtSpaceLayout() { // manager function
+    var artwork by remember { mutableStateOf(1) } // tracks the current artwork
 
-    Column {
-        ArtWorkCanvas(artwork = artwork)
-        ArtWorkDescription()
+    Column { // child functions
+        ArtWorkCanvas(artwork = artwork) // passes down the actual state
+        ArtWorkDescription(artwork = artwork) // passes down the actual state
         DisplayController(
             onNextClick = {
                 if (artwork == 1) {
@@ -66,7 +66,7 @@ fun ArtSpaceLayout() {
                 }
                 else {
                     artwork = 1
-                }},
+                }}, // pass actual function logic
             onPreviousClick = {
                 if (artwork == 1) {
                     artwork = 3
@@ -77,15 +77,15 @@ fun ArtSpaceLayout() {
                 else {
                     artwork = 2
                 }
-            },
+            }, // pass actual function logic
             modifier = Modifier.padding(top = 32.dp)
         )
     }
 }
 
 @Composable
-fun ArtWorkCanvas(artwork: Int) {
-    var imageResource = when (artwork) {
+fun ArtWorkCanvas(artwork: Int) { // takes the state as a template
+    val imageResource = when (artwork) {
         1 -> R.drawable._1
         2 -> R.drawable._2
         3 -> R.drawable._3
@@ -103,29 +103,47 @@ fun ArtWorkCanvas(artwork: Int) {
 }
 
 @Composable
-fun ArtWorkDescription(
+fun ArtWorkDescription(artwork: Int) { // takes the state as a template
+    val artworkTitle = when (artwork) {
+        1 -> R.string.artwork_1_title
+        2 -> R.string.artwork_2_title
+        3 -> R.string.artwork_3_title
+        else -> R.string.artwork_1_title
+    }
 
-) {
+    val artworkArtist = when (artwork) {
+        1 -> R.string.artist_1
+        2 -> R.string.artist_2
+        3 -> R.string.artist_3
+        else -> R.string.artist_1
+    }
+
+    val artworkYear = when (artwork) {
+        1 -> R.string.artwork_1_year
+        2 -> R.string.artwork_2_year
+        3 -> R.string.artwork_3_year
+        else -> R.string.artwork_1_year
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
-
     ) {
         Text(
-            text = stringResource(id = R.string.artwork_1_title),
+            text = stringResource(id = artworkTitle),
             color = Color.DarkGray,
-            fontSize = 28.sp
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
         )
         Text(
-            stringResource(id = R.string.artist_1),
-            fontWeight = FontWeight.Thin,
+            stringResource(id = artworkArtist),
+            fontWeight = FontWeight.W400,
             fontStyle = FontStyle.Italic
-
         )
         Text(
-            stringResource(id = R.string.artwork_1_year),
-            fontWeight = FontWeight.Thin,
+            stringResource(id = artworkYear),
+            fontWeight = FontWeight.W400,
             fontStyle = FontStyle.Italic
         )
 
@@ -134,10 +152,9 @@ fun ArtWorkDescription(
 
 @Composable
 fun DisplayController(
-    onNextClick: () -> Unit,
-    onPreviousClick: () -> Unit,
+    onNextClick: () -> Unit, // pass function signature expected
+    onPreviousClick: () -> Unit, // pass function signature expected
     modifier: Modifier = Modifier
-
 ) {
     Row(
         modifier = modifier
@@ -163,7 +180,7 @@ fun DisplayController(
 
 @Preview(showBackground = true)
 @Composable
-fun ArtWorkImagePreview() {
+fun ArtSpacePreview() {
     ArtSpaceTheme {
         ArtSpaceLayout()
     }
