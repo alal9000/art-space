@@ -51,21 +51,49 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ArtSpaceLayout() {
+    var artwork by remember { mutableStateOf(1) } // Track the current artwork
+
     Column {
-        ArtWorkCanvas()
+        ArtWorkCanvas(artwork = artwork)
         ArtWorkDescription()
         DisplayController(
+            onNextClick = {
+                if (artwork == 1) {
+                    artwork++
+                }
+                else if (artwork == 2) {
+                    artwork++
+                }
+                else {
+                    artwork = 1
+                }},
+            onPreviousClick = {
+                if (artwork == 1) {
+                    artwork = 3
+                }
+                else if (artwork == 2) {
+                    artwork--
+                }
+                else {
+                    artwork = 2
+                }
+            },
             modifier = Modifier.padding(top = 32.dp)
         )
     }
 }
 
 @Composable
-fun ArtWorkCanvas() {
-
+fun ArtWorkCanvas(artwork: Int) {
+    var imageResource = when (artwork) {
+        1 -> R.drawable._1
+        2 -> R.drawable._2
+        3 -> R.drawable._3
+        else -> R.drawable._1
+    }
 
     Image(
-        painter = painterResource(id = R.drawable._01_digitalart),
+        painter = painterResource(id = imageResource),
         contentDescription = "Statue with Halo",
         modifier = Modifier
             .size(500.dp, 600.dp)  // Set a fixed size to prevent taking up all available space
@@ -75,7 +103,9 @@ fun ArtWorkCanvas() {
 }
 
 @Composable
-fun ArtWorkDescription() {
+fun ArtWorkDescription(
+
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -104,6 +134,8 @@ fun ArtWorkDescription() {
 
 @Composable
 fun DisplayController(
+    onNextClick: () -> Unit,
+    onPreviousClick: () -> Unit,
     modifier: Modifier = Modifier
 
 ) {
@@ -114,14 +146,16 @@ fun DisplayController(
         horizontalArrangement = Arrangement.Center,
 
     ) {
-        Button(onClick = { /* handle previous button click */}) {
+        Button(
+            onClick = { onPreviousClick() }
+        ) {
             Text(text = "Previous")
         }
 
         Button(
-            onClick = { /* handle next button click */},
+            onClick = { onNextClick() },
             modifier = Modifier.padding(start = 8.dp)
-            ) {
+        ) {
             Text(text = "Next")
         }
     }
